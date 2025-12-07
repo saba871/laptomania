@@ -6,6 +6,7 @@ const AppError = require("../utils/Apperror");
 const catchAsync = require("../utils/catchAsync");
 const { imageUpload } = require("../utils/image");
 
+
 // ვამატებთ ლეპტოპს მონაცემთა ბაზაში
 const addLaptop = catchAsync(async (req, res, next) => {
   const body = req.body;
@@ -30,6 +31,7 @@ const addLaptop = catchAsync(async (req, res, next) => {
   res.status(201).json(newLaptop);
 });
 
+
 // ვნახულობთ ყველა ლეპტოპს რაც ბაზაშია
 const getAllLaptop = catchAsync(async (req, res, next) => {
   const laptops = await Laptop.find();
@@ -37,18 +39,18 @@ const getAllLaptop = catchAsync(async (req, res, next) => {
   res.status(200).json(laptops);
 });
 
+
 // მოგვაქვს ლეპტოპი ID-ის დახმარებით
 const getLaptop = catchAsync(async (req, res, next) => {
   const id = req.params.id;
   const laptop = await Laptop.findById(id);
 
   if (!laptop) {
-    return next(
-      new AppError("Laptop cannot be found (error in getLaptop)", 404)
-    );
+    return next(new AppError("Laptop cannot be found (error in getLaptop)", 404));
   }
   res.status(200).json(laptop);
 });
+
 
 // შლის ლეპტოპს ID ის დახმარებით
 const deleteLaptop = catchAsync(async (req, res, next) => {
@@ -56,12 +58,11 @@ const deleteLaptop = catchAsync(async (req, res, next) => {
   const laptop = await Laptop.findByIdAndDelete(id);
 
   if (!laptop) {
-    return next(
-      new AppError("Laptop cannot be found (error in deleteLaptop)", 404)
-    );
+    return next(new AppError("Laptop cannot be found (error in deleteLaptop)", 404));
   }
   res.status(200).send("Laptop deleted");
 });
+
 
 // ცვლის ლეპტოპის ინგორმაციას ID-ის დახმარებით
 const updateLaptop = catchAsync(async (req, res, next) => {
@@ -71,9 +72,7 @@ const updateLaptop = catchAsync(async (req, res, next) => {
   const laptop = await Laptop.findByIdAndUpdate(id, body, { new: true });
 
   if (!laptop) {
-    return next(
-      new AppError("Laptop cannot be found (error in updateLaptop)", 404)
-    );
+    return next(new AppError("Laptop cannot be found (error in updateLaptop)", 404));
   }
 
   res.status(200).json(laptop);
