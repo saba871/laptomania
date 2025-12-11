@@ -3,7 +3,6 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
-// const path = require("path");
 const cookieParser = require("cookie-parser");
 
 // დაიმპორტებული მოდულები
@@ -15,7 +14,12 @@ const app = express();
 dotenv.config();
 
 // შუამავალი ფუნქციები
-app.use(cors());
+app.use(cors(
+    {
+        origin: "http://localhost:5173",
+        credentials: true,
+    }
+));
 app.use(cookieParser());
 app.use(express.json());
 
@@ -31,14 +35,14 @@ app.use(globalErrorHandle);
 
 // დაკავშირება მონაცმეთა ბაზასთან
 mongoose
-  .connect(process.env.DATABASE_URL)
-  .then(() => {
-    console.log("connecting to mongoDB");
+    .connect(process.env.DATABASE_URL)
+    .then(() => {
+        console.log("connecting to mongoDB");
 
-    app.listen(process.env.PORT, () => {
-      console.log(`Server is running on port ${process.env.PORT}`);
+        app.listen(process.env.PORT, () => {
+        console.log(`Server is running on port ${process.env.PORT}`);
+        });
+    })
+    .catch((err) => {
+        console.log("connection error", err);
     });
-  })
-  .catch((err) => {
-    console.log("connection error", err);
-  });

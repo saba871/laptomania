@@ -11,6 +11,8 @@ const settings = {
   transformation: [{ width: 400, height: 400, crop: "fit", gravity: "center" }],
 };
 
+
+// ტვირთავს ფოტოს cloudinary-ში
 const imageUpload = async (folder, files) => {
   try {
     const uploadPromises = files.map((file) =>
@@ -25,6 +27,17 @@ const imageUpload = async (folder, files) => {
   }
 };
 
+
+// შლის ფოტოს claudinary-იდან
+const deleteImage = async (public_id) => {
+  try {
+    await cloudinary.uploader.destroy(public_id);
+  } catch (error) {
+    console.log("error is in delete image function", error);
+  }
+};
+
 module.exports = {
   imageUpload,
+  deleteImage,
 };

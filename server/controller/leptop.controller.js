@@ -14,21 +14,22 @@ const addLaptop = catchAsync(async (req, res, next) => {
   // თუ ფაილები მივიდა
   let imageUrls = [];
   if (req.files && req.files.length > 0) {
-    const images = req.files.map((file) => file.path);
+    const image = req.files.map((file) => file.path);
 
     // ატვირთვა Cloudinary-ში
-    const result = await imageUpload("laptops", images);
+    const result = await imageUpload("laptops", image);
 
     // secure_url-ების მასივი
     imageUrls = result.map((image) => image.secure_url);
   }
-
-  // სწორად ასაინმენტი DB ველისთვის
+  
   body.image = imageUrls;
 
-  const newLaptop = await Laptop.create(body);
+  // სწორად ასაინმენტი DB ველისთვის
 
+  const newLaptop = await Laptop.create(body);
   res.status(201).json(newLaptop);
+
 });
 
 
@@ -60,6 +61,7 @@ const deleteLaptop = catchAsync(async (req, res, next) => {
   if (!laptop) {
     return next(new AppError("Laptop cannot be found (error in deleteLaptop)", 404));
   }
+
   res.status(200).send("Laptop deleted");
 });
 

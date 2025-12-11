@@ -15,7 +15,11 @@ const createAndSendToken = (user, statusCode, res) => {
 
   user.password = undefined
 
-  res.status(statusCode).cookie("lg", token, cookieOptions).json(user);
+  res.status(statusCode).cookie("lg", token, cookieOptions).json({
+    status: "success",
+    message: "Logged in successfully",
+    user
+  });
 }
 
 
@@ -25,7 +29,7 @@ const signUp = catchAsync(async (req, res, next) => {
 
   const newUser = await User.create({ fullname, email, password });
 
-  res.status(201).json("User created successfully");
+  res.status(201).json({message: "User created successfully"});
 })
 
 
@@ -47,7 +51,16 @@ const logIn = catchAsync(async (req, res, next) => {
   createAndSendToken(user, 200, res)
 })
 
+
+// log out ფუნქცია
+const logOut = catchAsync(async (req, res, next) => {
+  res.clearCookie("lg");
+  res.status(200).json({message: "Logged out successfully"});
+})
+
+
 module.exports = {
   signUp,
   logIn,
+  logOut
 }
