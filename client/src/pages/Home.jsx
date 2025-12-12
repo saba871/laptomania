@@ -9,8 +9,8 @@ const Home = () => {
     <main className="page-shell space-y-12">
       <section className="relative overflow-hidden rounded-3xl border border-white/10 bg-[rgba(2,6,23,0.75)] px-8 py-14 text-white surface-card" data-variant="frost">
         <div className="absolute inset-0 opacity-60" aria-hidden>
-          <div className="absolute -top-32 -right-10 h-64 w-64 rounded-full bg-gradient-to-br from-teal-400/40 to-cyan-500/40 blur-3xl" />
-          <div className="absolute -bottom-10 left-0 h-48 w-48 rounded-full bg-gradient-to-br from-cyan-500/30 to-white/10 blur-3xl" />
+          <div className="absolute -top-32 -right-10 h-64 w-64 rounded-full from-teal-400/40 to-cyan-500/40 blur-3xl" />
+          <div className="absolute -bottom-10 left-0 h-48 w-48 rounded-full from-cyan-500/30 to-white/10 blur-3xl" />
         </div>
 
         <div className="relative z-10 grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.8fr)] items-center">
