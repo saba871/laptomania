@@ -5,17 +5,16 @@ import LogIn from "./pages/logIn";
 import Panel from "./pages/Panel";
 import Protect from "./context/Protect";
 import Products from "./pages/Products";
-import { ToastContainer, toast } from 'react-toastify';
-
+import Home from "./pages/Home";
+import { ToastContainer } from 'react-toastify';
 
 function App() {
-
   return (
     <>
       <Nav />
 
       <Routes>
-        <Route path="/" element={<p>Home</p>} />
+        <Route path="/" element={<Home />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<LogIn />} />
         <Route path="/laptops" element={<Products />} />

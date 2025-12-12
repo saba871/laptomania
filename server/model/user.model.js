@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const validator = require('validator');
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken")
+const crypto = require("crypto")
 
 // მომხმარებლის მოდელი
 const userSchema = new mongoose.Schema({
@@ -33,29 +34,40 @@ const userSchema = new mongoose.Schema({
     default: "user"
   },
 
-  isVerified: {
+  isActive: {
     type: Boolean,
     default: true
   },
 
-  isActive: {
+  varificationCode: String,
+
+  isVerified: {
     type: Boolean,
-    default: true
-  }
+    default: false // true
+  },
 
 }, { timestamps: true })
 
 
 // შექმნის მომენტში სანამ დასეივდება მომხმარებლის info მანამდე გაეშვება ეს კოდი რომელიც მოახდენს password-ის hashing-ს
-userSchema.pre("save", async function() {
+userSchema.pre("save", async function(next) {
+  if(!this.isModified("password")) return next();
   // უნდა გამოვიყენოთ hash და არა hashSync რათა არ მოხდეს კოდის დაბლოკვა
   this.password = await bcrypt.hash(this.password, 12);
+  next();
 })
 
 
 // ადარებს logIn ის დროს მომხმარებლის პაროლებს და აბრუენებს true ან false
 userSchema.methods.comparePassword = async function(candidate) {
   return await bcrypt.compare(candidate, this.password)
+}
+
+
+userSchema.methods.createEmailVerificationToken = function() {
+  const code = crypto.randomBytes(12).toString("hex");
+  this.varificationCode = code
+  return code
 }
 
 

@@ -26,7 +26,7 @@ export const LeptopsProvider = ({children}) => {
   }
 
   useEffect(() => {
-    getLeptops();    
+    getLeptops();
   }, [])
 
 
@@ -36,7 +36,7 @@ export const LeptopsProvider = ({children}) => {
 
     if(laptop) {
         setCart(prev => prev.map(item => item._id === prod._id ? {...item, quantity: item.quantity + 1} : item));
-    }else {
+    } else {
         setCart(prev => [...prev, {...prod, quantity: 1}]);
     }
   }
@@ -87,7 +87,7 @@ export const LeptopsProvider = ({children}) => {
     }
   }
 
-  // ანახლებს laptop-ის infos 
+  // ანახლებს laptop-ის infos
   const updateLaptop = async(id, formData) => {
     const toasId = toast.loading('Updating...');
     try {
@@ -117,7 +117,7 @@ export const LeptopsProvider = ({children}) => {
   }
 
 
-  // დამატებს laptop-ს 
+  // დამატებს laptop-ს
   const addLaptop = async(formData) => {
     const toasId = toast.loading('Adding...');
 
@@ -129,7 +129,7 @@ export const LeptopsProvider = ({children}) => {
       });
 
       const result = await res.json();
-      
+
       setLeptops(prev => [...prev, result]);
 
       toast.update(toasId, {

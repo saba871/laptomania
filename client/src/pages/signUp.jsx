@@ -16,45 +16,64 @@ const SignUp = () => {
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-6 text-center">Sign Up</h1>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <input
-            type="text"
-            value={formData.fullname}
-            onChange={handleChange}
-            name="fullname"
-            placeholder="Full Name"
-            required
-            className="p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <input
-            type="email"
-            value={formData.email}
-            onChange={handleChange}
-            name="email"
-            placeholder="Email"
-            required
-            className="p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <input
-            type="password"
-            value={formData.password}
-            onChange={handleChange}
-            name="password"
-            placeholder="Password"
-            required
-            className="p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+    <main className="page-shell place-content-center">
+      <section className="surface-card max-w-md w-full mx-auto space-y-8">
+        <header className="space-y-2">
+          <p className="eyebrow-label">Create access</p>
+          <h1 className="text-3xl font-semibold">Join Leptomania</h1>
+          <p className="text-muted text-sm">
+            Set up your account to curate and manage the perfect laptop fleet.
+          </p>
+        </header>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <label className="eyebrow-label">Full name</label>
+            <input
+              type="text"
+              value={formData.fullname}
+              onChange={handleChange}
+              name="fullname"
+              placeholder="Alex Maxwell"
+              required
+              className="input-minimal"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className="eyebrow-label">Email</label>
+            <input
+              type="email"
+              value={formData.email}
+              onChange={handleChange}
+              name="email"
+              placeholder="you@studio.com"
+              required
+              className="input-minimal"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className="eyebrow-label">Password</label>
+            <input
+              type="password"
+              value={formData.password}
+              onChange={handleChange}
+              name="password"
+              placeholder="••••••••"
+              required
+              className="input-minimal"
+            />
+          </div>
+
           <button
             type="submit"
-            className="bg-blue-600 text-white p-3 rounded hover:bg-blue-700 transition"
+            className="button-minimal w-full bg-white/10 hover:bg-white/20 text-white/90 text-xs tracking-[0.4em] uppercase"
           >
-            Sign Up
+            Create account
           </button>
         </form>
-      </div>
+      </section>
     </main>
   );
 };
