@@ -41,7 +41,6 @@ export const LeptopsProvider = ({children}) => {
     }
   }
 
-  console.log(cart)
 
   // შლის პროდუქტს კალათიდან
   const romveFromCart = (obj) => {

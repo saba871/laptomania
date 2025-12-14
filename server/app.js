@@ -5,6 +5,12 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
 
+// cyber security
+const rateLimit = require("express-rate-limit");
+const mongoSanitize = require("express-mongo-sanitize");
+const helmet = require("helmet");
+
+
 // დაიმპორტებული მოდულები
 const globalErrorHandle = require("./controller/error.controller");
 const laptopRouter = require("./router/leptop.router");
