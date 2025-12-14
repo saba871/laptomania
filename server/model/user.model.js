@@ -50,12 +50,10 @@ const userSchema = new mongoose.Schema({
 
 
 // შექმნის მომენტში სანამ დასეივდება მომხმარებლის info მანამდე გაეშვება ეს კოდი რომელიც მოახდენს password-ის hashing-ს
-userSchema.pre("save", async function(next) {
-  if(!this.isModified("password")) return next();
-  // უნდა გამოვიყენოთ hash და არა hashSync რათა არ მოხდეს კოდის დაბლოკვა
+userSchema.pre("save", async function() {
+  if (!this.isModified("password")) return; // async function-ში არ ვიძახებ next()
   this.password = await bcrypt.hash(this.password, 12);
-  next();
-})
+});
 
 
 // ადარებს logIn ის დროს მომხმარებლის პაროლებს და აბრუენებს true ან false

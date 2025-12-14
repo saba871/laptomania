@@ -4,7 +4,7 @@ const express = require("express");
 // დაიმპორტებული ფუნციები auth controller-დან
 const { signUp, logIn, logOut } = require("../controller/auth.controller");
 const protect = require("../middleware/auth.middleware");
-const { verify } = require("jsonwebtoken");
+const { verify } = require("../controller/auth.controller");
 const authRouter = express.Router();
 
 

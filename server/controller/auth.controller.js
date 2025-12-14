@@ -31,29 +31,32 @@ const signUp = catchAsync(async (req, res, next) => {
 
   const newUser = await User.create({ fullname, email, password });
 
-  const code = newUser.createEmailVerificationToken();
+//   const code = newUser.createEmailVerificationToken();
 
-  const link = `${req.protocol}://${req.get("host")}/api/auth/verify/${code}`
+//   const link = `${req.protocol}://${req.get("host")}/api/auth/verify/${code}`
 
-  const html = `<h1>Hello ${fullname}</h1>`
+//   const html = `<h1>Hello ${fullname}</h1>`
 
   res.status(201).json({message: "User created successfully"});
 })
 
 
 // email ის ვერიფიკაცია
-const verify =  async(req, res, next) => {
+const verify = async (req, res, next) => {
   const { code } = req.params;
   const user = await User.findOne({ emailVerificationToken: code });
 
-  if(!user) {
+  if (!user) {
     return next(new AppError("Invalid or expired token", 400));
   }
 
   user.isVerified = true;
   await user.save({ validateBeforeSave: false });
-  res.status(200).json("email verified successfully");
-}
+
+  req.user = user;
+  next();
+};
+
 
 // ეხმარება მომხმარებელს რომ შევიდეს უკვე შექმნილ ექაუნთზე
 const logIn = catchAsync(async (req, res, next) => {

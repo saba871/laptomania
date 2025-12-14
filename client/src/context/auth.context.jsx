@@ -56,8 +56,6 @@ export const AuthProvider = ({children}) => {
         body: JSON.stringify(formObj),
       })
       const result = await res.json();
-
-      alert(result.message);
       navigate('/login');
 
       toast.update(toastId, {
