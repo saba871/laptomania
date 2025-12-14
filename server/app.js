@@ -20,16 +20,23 @@ const app = express();
 dotenv.config();
 
 // შუამავალი ფუნქციები
-app.use(cors(
-    {
-        origin: "http://localhost:5173",
-        credentials: true,
-    }
-));
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+  }),
+)
 app.use(cookieParser());
 app.use(express.json());
 
-// app.use('/laptops/images', express.static(path.join(__dirname, 'uploads/laptops')));
+// cyber security
+app.use(mongoSanitize());
+app.use(helmet());
+app.use(rateLimit({
+    max: 100,
+    windowMs: 60 * 60 * 1000,
+    message: "Too many requests from this IP, please try again in an hour!"
+}));
 
 // ბილიკები
 app.use("/api/laptops", laptopRouter);

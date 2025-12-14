@@ -25,12 +25,6 @@ export const AuthProvider = ({children}) => {
           method: "POST",
           credentials: "include",
         });
-
-        if (!res.ok) {
-          setUser(null);
-          return;
-        }
-
         const result = await res.json();
         setUser(result.user);
 
