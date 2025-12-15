@@ -58,6 +58,7 @@ export const AuthProvider = ({children}) => {
       const result = await res.json();
       navigate('/login');
 
+      alert(result.message)
       toast.update(toastId, {
         render: 'Signed up Successfully',
         type: 'success',

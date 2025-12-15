@@ -22,8 +22,6 @@ app.use(
   }),
 )
 
-console.log("FRONTEND_URL =", process.env.FRONTEND_URL);
-
 
 app.use(cookieParser());
 app.use(express.json());
