@@ -12,7 +12,7 @@ const createAndSendToken = (user, statusCode, res) => {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production" ? true : false,
     maxAge: process.env.COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000,
-    sameSite: "lax"
+    sameSite: "None"
   }
 
   user.password = undefined
