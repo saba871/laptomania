@@ -1,9 +1,9 @@
-import { Navigate } from "react-router";
-import { useAuth } from "./auth.context"
+import { Navigate } from 'react-router';
+import { useAuth } from './auth.context';
 
-const Protect = ({children}) => {
+const Protect = ({ children }) => {
   const { user } = useAuth();
-  return user ? children : <Navigate to={"/login"}/>;
-}
+  return user ? children : <Navigate to={'/login'} />;
+};
 
-export default Protect
+export default Protect;

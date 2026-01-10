@@ -43,9 +43,7 @@ const getLaptop = catchAsync(async (req, res, next) => {
   const laptop = await Laptop.findById(id);
 
   if (!laptop) {
-    return next(
-      new AppError("Laptop cannot be found (error in getLaptop)", 404)
-    );
+    return next(new AppError("Laptop cannot be found (error in getLaptop)", 404));
   }
   res.status(200).json(laptop);
 });
@@ -56,9 +54,7 @@ const deleteLaptop = catchAsync(async (req, res, next) => {
   const laptop = await Laptop.findByIdAndDelete(id);
 
   if (!laptop) {
-    return next(
-      new AppError("Laptop cannot be found (error in deleteLaptop)", 404)
-    );
+    return next(new AppError("Laptop cannot be found (error in deleteLaptop)", 404));
   }
 
   res.status(200).send("Laptop deleted");
@@ -72,9 +68,7 @@ const updateLaptop = catchAsync(async (req, res, next) => {
   const laptop = await Laptop.findByIdAndUpdate(id, body, { new: true });
 
   if (!laptop) {
-    return next(
-      new AppError("Laptop cannot be found (error in updateLaptop)", 404)
-    );
+    return next(new AppError("Laptop cannot be found (error in updateLaptop)", 404));
   }
 
   res.status(200).json(laptop);
