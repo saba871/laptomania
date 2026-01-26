@@ -2,7 +2,7 @@ import { useAuth } from "../context/auth.context";
 import { useForm } from "../hooks/useForm";
 
 const SignUp = () => {
-  const { signUp } = useAuth();
+  const { signUp, googleAuth } = useAuth();
 
   const [formData, handleChange] = useForm({
     fullname: "",
@@ -39,6 +39,7 @@ const SignUp = () => {
           </button>
 
           <button
+          onClick={ googleAuth }
             type="button"
             className="button-minimal w-full bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center gap-3 text-sm"
           >
