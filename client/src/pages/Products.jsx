@@ -7,31 +7,12 @@ const Laptop = ({ laptop }) => {
     const { user } = useAuth();
     const [editing, setEditing] = useState(false);
 
-    // მედიის ლოგიკა იგივეა, რათა შეინარჩუნოს თავსებადობა
     const media = (() => {
-        if (Array.isArray(laptop.image)) return laptop.image;
-        if (Array.isArray(laptop.images)) return laptop.images;
-        if (typeof laptop.image === "string" && laptop.image)
-            return [laptop.image];
-        if (typeof laptop.images === "string" && laptop.images)
-            return [laptop.images];
-        return [];
+        const imgs = laptop.image || laptop.images || [];
+        return Array.isArray(imgs) ? imgs : [imgs];
     })();
 
     const mainImage = media[0];
-
-    const editableFields = Object.keys(laptop).filter(
-        (key) =>
-            !["_id", "__v", "createdAt", "updatedAt", "isAvailable"].includes(
-                key
-            )
-    );
-
-    const formatLabel = (label) =>
-        label
-            .replace(/_/g, " ")
-            .replace(/([a-z])([A-Z])/g, "$1 $2")
-            .replace(/^./, (char) => char.toUpperCase());
 
     const handleUpdate = async (e) => {
         e.preventDefault();
@@ -41,164 +22,94 @@ const Laptop = ({ laptop }) => {
     };
 
     if (editing) {
-        // რედაქტირების ფორმა არ შეგვიცვლია, რადგან მთავარი პრობლემა დიზაინია
         return (
-            <article className="surface-card rounded-3xl border border-white/5 shadow-xl shadow-black/5 p-6">
-                <form onSubmit={handleUpdate} className="flex flex-col gap-4">
-                    <h3 className="text-xl font-semibold">
-                        Editing: {laptop.brand} {laptop.model}
-                    </h3>
-                    {editableFields.map((key) => (
-                        <div key={key} className="flex flex-col gap-1">
-                            <label className="eyebrow-label">
-                                {formatLabel(key)}
-                            </label>
-                            {key === "image" || key === "images" ? (
-                                <input
-                                    type="file"
-                                    name="images"
-                                    multiple
-                                    className="input-minimal"
-                                />
-                            ) : (
-                                <input
-                                    type="text"
-                                    name={key}
-                                    defaultValue={laptop[key] || ""}
-                                    className="input-minimal"
-                                />
-                            )}
-                        </div>
-                    ))}
-
-                    <div className="flex flex-col gap-2 sm:flex-row">
-                        <button
-                            type="submit"
-                            className="button-minimal flex-1 bg-white/10 text-xs uppercase tracking-[0.3em] hover:bg-white/20"
-                        >
-                            Save Changes
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => setEditing(false)}
-                            className="button-minimal flex-1 text-xs uppercase tracking-[0.3em]"
-                        >
-                            Cancel
-                        </button>
+            <article className="surface-card !p-8 animate-reveal">
+                <form onSubmit={handleUpdate} className="space-y-6">
+                    <header className="flex justify-between items-center">
+                        <h3 className="text-xl font-bold tracking-tight">Modify Registry</h3>
+                        <button type="button" onClick={() => setEditing(false)} className="text-xs uppercase tracking-widest text-white/40 hover:text-white">Close</button>
+                    </header>
+                    <div className="grid grid-cols-2 gap-4">
+                        <input className="input-minimal" name="brand" defaultValue={laptop.brand} placeholder="Brand" />
+                        <input className="input-minimal" name="model" defaultValue={laptop.model} placeholder="Model" />
+                        <input className="input-minimal" name="price" defaultValue={laptop.price} placeholder="Price" />
+                        <input className="input-minimal" name="stock" defaultValue={laptop.stock} placeholder="Stock" />
                     </div>
+                    <textarea className="input-minimal" name="description" defaultValue={laptop.description} rows={3} placeholder="Description" />
+                    <button type="submit" className="button-minimal w-full !bg-cyan-500 !text-black font-bold uppercase tracking-[0.2em]">Commit Changes</button>
                 </form>
             </article>
         );
     }
 
-    // ნორმალური ჩვენების (არარედაქტირების) რეჟიმი
     return (
-        <article className="surface-card flex flex-col sm:flex-row rounded-3xl border border-white/5 shadow-xl shadow-black/5 transition duration-300 hover:-translate-y-1 hover:border-white/10 overflow-hidden">
-            {/* ფოტოს განყოფილება - უფრო დიდი და გამოკვეთილი */}
-            <div className="sm:w-2/5 min-h-[250px] overflow-hidden from-slate-900 via-slate-800 to-slate-900 relative">
-                <figure>
-                    {mainImage ? (
-                        <img
-                            src={mainImage}
-                            alt={`${laptop.brand} ${laptop.model}`}
-                            className="h-full w-full object-cover object-center transition duration-500 hover:scale-105 min-h-[250px]"
-                        />
-                    ) : (
-                        <div className="flex h-full w-full flex-col items-center justify-center text-center text-sm text-muted p-4 min-h-[250px]">
-                            <span className="text-lg font-semibold">
-                                {laptop.brand || "Unknown"}
-                            </span>
-                            <span>No photo provided</span>
-                        </div>
-                    )}
-                </figure>
-                <div className="mt-4 rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-center">
-                    <p className="text-xs uppercase tracking-[0.35em] text-white/70">
-                        Drop price
-                    </p>
-                    <p className="text-2xl font-semibold text-white">
-                        ${laptop.price || 0}
-                    </p>
+        <article className="surface-card flex flex-col lg:flex-row p-0 overflow-hidden border-white/5 group hover:border-cyan-500/30 transition-all duration-500">
+            {/* Visual Section */}
+            <div className="lg:w-2/5 relative h-64 lg:h-auto overflow-hidden bg-gradient-to-br from-slate-900 to-black">
+                {mainImage ? (
+                    <img
+                        src={mainImage}
+                        alt={laptop.model}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                ) : (
+                    <div className="w-full h-full flex items-center justify-center text-white/10 uppercase font-black text-4xl italic">Lepto</div>
+                )}
+
+                {/* Price Tag Overlay */}
+                <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md border border-white/10 px-4 py-2 rounded-full">
+                    <p className="text-cyan-400 font-mono font-bold">${laptop.price}</p>
                 </div>
             </div>
 
-            {/* ინფორმაციის და მოქმედებების განყოფილება */}
-            <div className="flex flex-1 flex-col justify-between gap-4 p-6 sm:w-3/5">
-                {/* სათაური და აღწერა */}
+            {/* Content Section */}
+            <div className="lg:w-3/5 p-8 flex flex-col justify-between space-y-6">
                 <div>
-                    <h2 className="text-2xl font-semibold leading-tight mb-1">
-                        {laptop.brand} {laptop.model}
-                    </h2>
-                    <p className="eyebrow-label mb-3 text-muted">
-                        {laptop.series || laptop.category || "Laptop"}
-                    </p>
+                    <div className="flex justify-between items-start mb-2">
+                        <p className="eyebrow-label !text-cyan-400/80 !mb-0">{laptop.brand}</p>
+                        <span className="text-[10px] text-white/20 font-mono">ID: {laptop._id?.slice(-6)}</span>
+                    </div>
+                    <h2 className="text-2xl font-bold tracking-tight mb-4 group-hover:text-cyan-400 transition-colors">{laptop.model}</h2>
 
-                    {/* ძირითადი მახასიათებლები - უფრო სუფთა ცხრილის ფორმატი */}
-                    <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
-                        <span className="text-white">
-                            Processor:{" "}
-                            <span className="text-muted">
-                                {laptop.processor || laptop.proccesor || "N/A"}
-                            </span>
-                        </span>
-                        <span className="text-white">
-                            RAM:{" "}
-                            <span className="text-muted">
-                                {laptop.ram || "N/A"}
-                            </span>
-                        </span>
-                        <span className="text-white">
-                            Storage:{" "}
-                            <span className="text-muted">
-                                {laptop.storage || "N/A"}
-                            </span>
-                        </span>
-                        <span className="text-white">
-                            OS:{" "}
-                            <span className="text-muted">
-                                {laptop.os || "N/A"}
-                            </span>
-                        </span>
+                    {/* Specs Grid */}
+                    <div className="grid grid-cols-2 gap-y-3 gap-x-6">
+                        <div className="space-y-1">
+                            <p className="text-[9px] uppercase tracking-widest text-white/30">Processor</p>
+                            <p className="text-xs font-medium text-white/80 truncate">{laptop.proccesor || laptop.processor || "Generic"}</p>
+                        </div>
+                        <div className="space-y-1">
+                            <p className="text-[9px] uppercase tracking-widest text-white/30">Memory</p>
+                            <p className="text-xs font-medium text-white/80">{laptop.ram || "0GB"}</p>
+                        </div>
+                        <div className="space-y-1">
+                            <p className="text-[9px] uppercase tracking-widest text-white/30">Storage</p>
+                            <p className="text-xs font-medium text-white/80">{laptop.storage || "0GB"}</p>
+                        </div>
+                        <div className="space-y-1">
+                            <p className="text-[9px] uppercase tracking-widest text-white/30">Availability</p>
+                            <p className={`text-xs font-medium ${laptop.stock > 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                                {laptop.stock > 0 ? `In Stock (${laptop.stock})` : 'Sold Out'}
+                            </p>
+                        </div>
                     </div>
                 </div>
 
-                {/* აღწერა - უფრო კომპაქტური */}
-                <p className="text-sm leading-relaxed text-muted mt-3 line-clamp-2">
-                    {laptop.description ||
-                        "No description has been added for this laptop yet."}
-                </p>
-
-                {/* მოქმედებები და მარაგი */}
-                <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-white/10">
-                    <span className="text-xs uppercase tracking-[0.35em] text-muted">
-                        Stock:{" "}
-                        <strong className="tracking-normal text-white">
-                            {laptop.stock || 0}
-                        </strong>{" "}
-                        | Condition: {laptop.condition || "Available"}
-                    </span>
-
+                {/* Actions Section */}
+                <div className="pt-6 border-t border-white/5 flex gap-3">
                     {user?.role === "admin" ? (
-                        <div className="flex gap-2">
-                            <button
-                                onClick={() => deleteLeptop(laptop._id)}
-                                className="button-minimal px-3 py-1 border border-red-400/40 bg-red-500/10 text-xs uppercase tracking-[0.2em] text-red-200 hover:bg-red-500/20"
-                            >
-                                Delete
+                        <>
+                            <button onClick={() => setEditing(true)} className="button-minimal flex-1 !py-3 border-white/10 text-[10px] uppercase font-bold tracking-widest hover:!bg-white/5 transition-all">Edit Registry</button>
+                            <button onClick={() => deleteLeptop(laptop._id)} className="button-minimal !py-3 !border-rose-500/20 !text-rose-500 hover:!bg-rose-500/10 transition-all">
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                             </button>
-                            <button
-                                onClick={() => setEditing(true)}
-                                className="button-minimal px-3 py-1 border border-white/20 bg-white/10 text-xs uppercase tracking-[0.2em] hover:bg-white/20"
-                            >
-                                Update
-                            </button>
-                        </div>
+                        </>
                     ) : (
                         <button
                             onClick={() => addToCart(laptop)}
-                            className="button-minimal px-4 py-2 border border-emerald-400/50 bg-emerald-500/10 text-xs uppercase tracking-[0.35em] text-emerald-100 hover:bg-emerald-500/20"
+                            disabled={laptop.stock <= 0}
+                            className="button-minimal w-full !bg-white !text-black !py-4 font-black text-[11px] uppercase tracking-[0.2em] hover:!bg-cyan-500 transition-all disabled:opacity-20 disabled:cursor-not-allowed"
                         >
-                            Add to cart
+                            {laptop.stock > 0 ? "Acquire Machine" : "Unavailable"}
                         </button>
                     )}
                 </div>
@@ -207,52 +118,46 @@ const Laptop = ({ laptop }) => {
     );
 };
 
-// დანარჩენი კომპონენტები (LaptopList, Catalog) იგივე რჩება.
-const LaptopList = ({ limit } = {}) => {
+const LaptopList = ({ limit }) => {
     const { leptops } = useLeptop();
 
     if (!leptops || leptops.length === 0) {
-        return <p className="text-muted">No laptops found.</p>;
+        return (
+            <div className="py-20 text-center surface-card border-dashed border-white/10">
+                <p className="text-white/30 uppercase tracking-widest text-xs">No hardware detected in current sector.</p>
+            </div>
+        );
     }
 
     const items = limit ? leptops.slice(0, limit) : leptops;
 
-    // შეიცვალა grid-ის სვეტები 2-დან 1-ზე მობილურისთვის და 2-ზე დესკტოპისთვის (თუ გვინდა ჰორიზონტალური დიზაინის უკეთ წარმოჩენა)
     return (
-        <section className="grid gap-6 xl:grid-cols-2">
-            {items.map((laptop) => (
-                <Laptop key={laptop._id} laptop={laptop} />
+        <section className="grid gap-8 grid-cols-1 xl:grid-cols-2">
+            {items.map((laptop, index) => (
+                <div key={laptop._id} className="animate-reveal" style={{ animationDelay: `${index * 100}ms` }}>
+                    <Laptop laptop={laptop} />
+                </div>
             ))}
         </section>
     );
 };
 
 const Catalog = () => {
-    const { user } = useAuth();
-
     return (
-        <main className="page-shell space-y-10">
-            <header className="surface-card" data-variant="subtle">
-                <div className="flex flex-wrap items-end justify-between gap-6">
-                    <div className="space-y-3">
-                        <p className="eyebrow-label">Inventory</p>
-                        <h1 className="text-4xl font-semibold tracking-tight">
-                            Laptops
-                        </h1>
-                        <p className="text-muted max-w-2xl">
-                            Hand-picked premium devices curated for performance
-                            and endurance.
-                        </p>
+        <main className="page-shell space-y-12">
+            <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                <div className="space-y-2">
+                    <p className="eyebrow-label text-cyan-400">Hardware Catalog</p>
+                    <h1 className="text-5xl font-black tracking-tighter">THE FLEET</h1>
+                    <p className="text-white/40 max-w-md text-sm leading-relaxed">
+                        High-performance workstations engineered for the next generation of digital labor.
+                    </p>
+                </div>
+                <div className="flex gap-4">
+                    <div className="text-right">
+                        <p className="text-[10px] uppercase text-white/30 tracking-widest">Global Stock</p>
+                        <p className="text-xl font-mono text-white/80">VERIFIED</p>
                     </div>
-                    {user ? (
-                        <span className="text-xs uppercase tracking-[0.4em] text-muted">
-                            Signed in as {user.name || user.email}
-                        </span>
-                    ) : (
-                        <span className="text-xs uppercase tracking-[0.4em] text-muted">
-                            Browse only
-                        </span>
-                    )}
                 </div>
             </header>
 

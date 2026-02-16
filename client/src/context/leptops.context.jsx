@@ -148,8 +148,28 @@ export const LeptopsProvider = ({children}) => {
   }
 
 
+  const proccedToCheckOut = async () => {
+    try {
+        const response = await fetch(`${API_URL}/checkout`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(cart.map((prod) => prod._id)),
+            credentials: 'include'
+        })
+
+        const data = await response.json();
+
+        window.location.href = data.url;
+    } catch (error) {
+        console.log(error)
+    }
+  }
+
+
   return (
-    <LeptopsContext.Provider value={{ leptops, deleteLeptop, updateLaptop, addLaptop, addToCart, cart, romveFromCart, removeAll }}>
+    <LeptopsContext.Provider value={{ proccedToCheckOut, leptops, deleteLeptop, updateLaptop, addLaptop, addToCart, cart, romveFromCart, removeAll }}>
       {children}
     </LeptopsContext.Provider>
   )

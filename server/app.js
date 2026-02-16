@@ -10,6 +10,7 @@ const globalErrorHandle = require("./controller/error.controller");
 const laptopRouter = require("./router/leptop.router");
 const authRouter = require("./router/auth.router");
 const { oauthRouter } = require("./router/oauth.router");
+const paymentRouter = require("./router/payment.router");
 
 const app = express();
 dotenv.config();
@@ -29,6 +30,8 @@ app.use(express.json());
 app.use("/api/laptops", laptopRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/oauth", oauthRouter);
+app.use("/api/payment", paymentRouter)
+
 
 // გლობალური erorr ების კონტროლერი შუამავალი
 app.use(globalErrorHandle);

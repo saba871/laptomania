@@ -11,12 +11,15 @@ const createAndSendToken = (user, statusCode, res) => {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production" ? true : false,
         maxAge: process.env.COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000,
-        sameSite: "None",
+        sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", // Localhost-ზე Lax ჯობია
     };
 
     user.password = undefined;
 
-    res.status(statusCode).cookie("lg", token, cookieOptions).redirect(process.env.FRONTEND_URL + "/panel");
+    res.status(statusCode).cookie("lg", token, cookieOptions).json({
+        status: "success",
+        user
+    });
 };
 
 // ვქმნი მომხმარებელის ექაუნთს (რეგისტრაცია)
