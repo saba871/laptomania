@@ -1,8 +1,9 @@
 // გადმოწერილი მოდულები
+const dotenv = require("dotenv");
+dotenv.config();
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
 
 // დაიმპორტებული მოდულები
@@ -13,7 +14,6 @@ const { oauthRouter } = require("./router/oauth.router");
 const paymentRouter = require("./router/payment.router");
 
 const app = express();
-dotenv.config();
 
 // შუამავალი ფუნქციები
 app.use(
